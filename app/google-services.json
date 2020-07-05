@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "552554513182",
+    "firebase_url": "https://fir-socialmedia-dummy.firebaseio.com",
+    "project_id": "fir-socialmedia-dummy",
+    "storage_bucket": "fir-socialmedia-dummy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:552554513182:android:ba41f7ca440314f0387f0f",
+        "android_client_info": {
+          "package_name": "com.toyibnurseha.firebasesocialmedia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "552554513182-u7vraoq39082kdad0dsrbp0qn1kochj1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2msb7zwW-aV9Dy0J-A9llgs1Kl2p4tWk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "552554513182-u7vraoq39082kdad0dsrbp0qn1kochj1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
