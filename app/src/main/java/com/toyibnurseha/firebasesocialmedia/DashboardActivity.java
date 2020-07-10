@@ -1,8 +1,8 @@
 package com.toyibnurseha.firebasesocialmedia;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -13,6 +13,10 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.toyibnurseha.firebasesocialmedia.notifications.Token;
 
 public class DashboardActivity extends AppCompatActivity {
 
@@ -20,6 +24,8 @@ public class DashboardActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
 
     ActionBar actionbar;
+
+    String mUID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +47,23 @@ public class DashboardActivity extends AppCompatActivity {
         FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
         ft1.replace(R.id.content, fragment1, "");
         ft1.commit();
+
+        checkUserStatus();
+
     }
+
+    @Override
+    protected void onResume() {
+        checkUserStatus();
+        super.onResume();
+    }
+
+    private void updateToken(String token){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Tokens");
+        Token mToken = new Token(token);
+        ref.child(mUID).setValue(mToken);
+    }
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener selectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
@@ -72,6 +94,24 @@ public class DashboardActivity extends AppCompatActivity {
                     ft3.replace(R.id.content, fragment3, "");
                     ft3.commit();
                     return true;
+
+                case R.id.nav_chat:
+                    //users fragment transaction
+                    actionbar.setTitle("Chat");
+                    ChatListFragment fragment4 = new ChatListFragment();
+                    FragmentTransaction ft4 = getSupportFragmentManager().beginTransaction();
+                    ft4.replace(R.id.content, fragment4, "");
+                    ft4.commit();
+                    return true;
+
+                case R.id.nav_notification:
+                    //users fragment transaction
+                    actionbar.setTitle("Chat");
+                    NotificationsFragment fragment5 = new NotificationsFragment();
+                    FragmentTransaction ft5 = getSupportFragmentManager().beginTransaction();
+                    ft5.replace(R.id.content, fragment5, "");
+                    ft5.commit();
+                    return true;
             }
             return false;
         }
@@ -82,11 +122,20 @@ public class DashboardActivity extends AppCompatActivity {
         if (user != null){
             //user signed in stay here
             //set email
+            mUID = user.getUid();
+
+            //save uid currently signed in in sharedpreferences
+            SharedPreferences sp = getSharedPreferences("SP_USER", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putString("Current_USERID", mUID);
+            editor.apply();
         } else {
             //user not signed in, go to mainActivity
             startActivity(new Intent(DashboardActivity.this, MainActivity.class));
             finish();
         }
+        //update Token
+        updateToken(FirebaseInstanceId.getInstance().getToken());
     }
 
     @Override
@@ -95,31 +144,10 @@ public class DashboardActivity extends AppCompatActivity {
         super.onStart();
     }
 
-//  inflate options menu
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //inflateing menu
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    //handle menu item click
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        //get Item id
-        int id = item.getItemId();
-        if (id == R.id.action_logout){
-            firebaseAuth.signOut();
-            checkUserStatus();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         finish();
     }
+
 }

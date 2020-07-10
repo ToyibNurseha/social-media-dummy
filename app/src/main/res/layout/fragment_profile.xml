@@ -25,6 +25,7 @@
             </androidx.appcompat.widget.AppCompatImageView>
 
             <LinearLayout
+                android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:orientation="horizontal"
@@ -68,7 +69,15 @@
                         android:textColor="@android:color/white"/>
 
                 </LinearLayout>
+
+
             </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_post"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/linearLayout"/>
 
         </RelativeLayout>
 
